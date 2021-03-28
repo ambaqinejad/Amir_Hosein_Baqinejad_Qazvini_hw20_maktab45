@@ -48,6 +48,11 @@ const bloggerSchema = new Schema({
         required: [true, 'Email is required'],
         trim: true
     },
+    role: {
+        type: String,
+        enum: ['admin', 'blogger'],
+        default: 'blogger'
+    },
     createdAt: {
         type: Date,
         default: Date.now
