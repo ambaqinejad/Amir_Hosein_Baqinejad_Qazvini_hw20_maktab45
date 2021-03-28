@@ -32,7 +32,10 @@ const bloggerSchema = new Schema({
         enum: ['male', 'female'],
         default: 'male'
     },
-    profileImage: String,
+    profileImage: {
+        type: String,
+        required: [true, 'Profile Image is required.']
+    },
     phone: {
         type: String,
         required: [true, 'Phone number is required'],

@@ -14,6 +14,7 @@ const dashboardRouter = require(path.join(__dirname, 'routes', 'dashboard.js'));
 const authRouter = require(path.join(__dirname, 'routes', 'auth', 'auth.js'));
 const homeRouter = require(path.join(__dirname, 'routes', 'home.js'));
 const session = require(path.join(__dirname, 'tools', 'session.js'));
+require(path.join(__dirname, 'tools', 'initializer.js'));
 
 // database initialization
 mongoose.connect(`${dbConfig.DB_HOST}${dbConfig.DB_PORT}/${dbConfig.DB_NAME}`, {
