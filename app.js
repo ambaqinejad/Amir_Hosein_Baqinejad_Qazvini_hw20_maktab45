@@ -3,36 +3,37 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
-require('dotenv').config();
 
 // Nodejs modules
 const path = require('path');
 
 // My own modules
+const serverConfig = require(path.join(__dirname, 'config', 'serverConfig.js'));
+const dbConfig = require(path.join(__dirname, 'config', 'dbConfig.js'));
 const dashboardRouter = require(path.join(__dirname, 'routes', 'dashboard.js'));
 const authRouter = require(path.join(__dirname, 'routes', 'auth', 'auth.js'));
 const homeRouter = require(path.join(__dirname, 'routes', 'home.js'));
 const session = require(path.join(__dirname, 'tools', 'session.js'));
 
 // database initialization
-mongoose.connect(`${process.env.DB_HOST}${process.env.DB_PORT}/${process.env.DB_NAME}`, {
+mongoose.connect(`${dbConfig.DB_HOST}${dbConfig.DB_PORT}/${dbConfig.DB_NAME}`, {
     useCreateIndex: true,
     useFindAndModify: true,
     useNewUrlParser: true,
     useUnifiedTopology: true
 }, (err) => {
     if (err) {
-        console.log(process.env.DB_CONNECTION_ERROR);
+        console.log(dbConfig.DB_CONNECTION_ERROR);
     } else {
-        console.log(process.env.DB_CONNECTION_SUCCESS);
+        console.log(dbConfig.DB_CONNECTION_SUCCESS);
     }
 })
 
 // server initialization
 const app = express();
-app.set('view engine', process.env.SERVER_VIEW_ENGINE);
-app.set('views', process.env.SERVER_VIEW_FOLDER);
-const serverPort = process.env.SERVER_PORT || 3000;
+app.set('view engine', serverConfig.SERVER_VIEW_ENGINE);
+app.set('views', serverConfig.SERVER_VIEW_FOLDER);
+const serverPort = serverConfig.SERVER_PORT || 3000;
 
 // middleware
 app.use(express.static(path.join(__dirname, 'public')));
@@ -54,5 +55,5 @@ app.use('/', homeRouter)
 
 // running server
 app.listen(serverPort, () => {
-    console.log(`${process.env.SERVER_START_MESSAGE} ${serverPort}`);
+    console.log(`${serverConfig.SERVER_START_MESSAGE} ${serverPort}`);
 });

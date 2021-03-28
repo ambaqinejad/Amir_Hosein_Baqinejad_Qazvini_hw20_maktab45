@@ -25,7 +25,6 @@ $(document).ready(function() {
             return false
         }
         if (email && invalidEmail()) {
-            console.log('whyyyyyy');
             return false;
         }
         if (phone && badPhoneLength()) {
