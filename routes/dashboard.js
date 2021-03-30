@@ -27,4 +27,6 @@ router.get('/logout', dashboardController.logout)
 
 router.post('/update', dashboardController.updateBlogger);
 
+router.post('/uploadAvatar', dashboardController.uploadAvatar);
+
 module.exports = router;

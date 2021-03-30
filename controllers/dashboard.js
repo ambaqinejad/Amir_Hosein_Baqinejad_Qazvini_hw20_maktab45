@@ -1,11 +1,15 @@
 // nodejs modules
 const path = require('path');
+const fs = require('fs');
 
 // third party modules
+const multer = require('multer');
+const { resolveSoa } = require('dns');
 
 // my own modules
 const Blogger = require(path.join(process.cwd(), 'models', 'blogger.js'));
 const redirect = require(path.join(process.cwd(), 'tools', 'redirection.js'));
+const multerInitializer = require(path.join(process.cwd(), 'tools', 'multerInitializer.js'));
 
 const getDashboardPage = (req, res, next) => {
     res.render('dashboard.ejs', {
@@ -32,7 +36,7 @@ const updateBlogger = (req, res, next) => {
         lastName: req.body.lastName || req.session.blogger.lastName,
         username: req.body.username || req.session.blogger.username,
         gender: req.body.gender || req.session.blogger.gender,
-        profileImage: req.body.profileImage || req.session.blogger.profileImage,
+        avatar: req.body.avatar || req.session.blogger.avatar,
         phone: req.body.phone ? `+98${req.body.phone}` : req.session.blogger.phone,
         email: req.body.email || req.session.blogger.email,
         createdAt: req.body.createdAt || req.session.blogger.createdAt
@@ -64,10 +68,46 @@ const logout = (req, res, next) => {
     return res.redirect('/auth/signIn')
 }
 
+const uploadAvatar = (req, res, next) => {
+    const upload = multerInitializer.single('avatar');
+    upload(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+            console.log(err.message);
+            res.redirect('/dashboard')
+        } else if (err) {
+            console.log(err.message);
+            res.redirect('/dashboard')
+        } else {
+            Blogger.findByIdAndUpdate(req.session.blogger._id, { avatar: req.file.filename }, { new: true }, (err, blogger) => {
+                if (err) {
+                    console.log(err.message);
+                    res.redirect('/dashboard')
+                } else {
+                    if (req.session.blogger.avatar) {
+                        fs.unlink(path.join(process.cwd(), 'public', 'images', 'avatars', req.session.blogger.avatar), (err) => {
+                            if (err) {
+                                console.log(err.message);
+                                res.redirect('/dashboard')
+                            } else {
+                                req.session.blogger = blogger;
+                                res.redirect('/dashboard')
+                            }
+                        })
+                    } else {
+                        req.session.blogger = blogger;
+                        res.redirect('/dashboard')
+                    }
+                }
+            })
+        }
+    })
+}
+
 module.exports = {
     getDashboardPage,
     getWhoAmIPage,
     getModifyInformationPage,
     updateBlogger,
-    logout
+    logout,
+    uploadAvatar
 }
