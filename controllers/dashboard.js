@@ -17,6 +17,12 @@ const getDashboardPage = (req, res, next) => {
     })
 }
 
+const getNewPostPage = (req, res, next) => {
+    res.render('newPost.ejs', {
+        blogger: req.session.blogger
+    })
+}
+
 const getWhoAmIPage = (req, res, next) => {
     res.render('whoAmI.ejs', {
         blogger: req.session.blogger
@@ -69,7 +75,8 @@ const logout = (req, res, next) => {
 }
 
 const uploadAvatar = (req, res, next) => {
-    const upload = multerInitializer.single('avatar');
+    const upload = multerInitializer.single('image');
+    console.log(req.file);
     upload(req, res, (err) => {
         if (err instanceof multer.MulterError) {
             console.log(err.message);
@@ -103,11 +110,17 @@ const uploadAvatar = (req, res, next) => {
     })
 }
 
+const uploadPost = (req, res, next) => {
+    console.log(req.about);
+}
+
 module.exports = {
     getDashboardPage,
+    getNewPostPage,
     getWhoAmIPage,
     getModifyInformationPage,
     updateBlogger,
     logout,
-    uploadAvatar
+    uploadAvatar,
+    uploadPost
 }

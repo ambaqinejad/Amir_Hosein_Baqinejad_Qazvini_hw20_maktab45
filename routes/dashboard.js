@@ -14,6 +14,8 @@ router.use(express.static(path.join(process.cwd(), 'public')));
 
 router.get('/', dashboardController.getDashboardPage);
 
+router.get('/newPost', dashboardController.getNewPostPage);
+
 router.get('/whoAmI', dashboardController.getWhoAmIPage);
 
 router.get('/modifyInformation',
@@ -28,5 +30,7 @@ router.get('/logout', dashboardController.logout)
 router.post('/update', dashboardController.updateBlogger);
 
 router.post('/uploadAvatar', dashboardController.uploadAvatar);
+
+router.post('/uploadPost', dashboardController.uploadPost);
 
 module.exports = router;
