@@ -7,6 +7,7 @@ const multer = require('multer');
 
 // my own modules
 const Blogger = require(path.join(process.cwd(), 'models', 'blogger.js'));
+const Article = require(path.join(process.cwd(), 'models', 'article.js'));
 const redirect = require(path.join(process.cwd(), 'tools', 'redirection.js'));
 const multerInitializer = require(path.join(process.cwd(), 'tools', 'multerInitializer.js'));
 
@@ -118,14 +119,26 @@ const uploadPostImage = (req, res, next) => {
         } else {
             console.log(req.file);
             res.json({
-                imageUrl: path.join(process.cwd(), 'public', 'images', 'post_images', req.file.imageName)
+                imageUrl: `images/post_images/${req.file.imageName}`
             })
         }
     })
 }
 
+const deletePostImage = (req, res) => {
+    req.body.forEach(url => {
+        fs.unlinkSync(path.join(process.cwd(), 'public', url));
+    })
+}
+
 const uploadPost = (req, res, next) => {
-    console.log(req.about);
+    new Article(req.body).save(err => {
+        if (err) {
+            return redirect(res, '/dashboard/newPost', 'Something went wrong.');
+        } else {
+            return res.redirect('/dashboard')
+        }
+    })
 }
 
 module.exports = {
@@ -137,5 +150,6 @@ module.exports = {
     logout,
     uploadAvatar,
     uploadPost,
-    uploadPostImage
+    uploadPostImage,
+    deletePostImage
 }

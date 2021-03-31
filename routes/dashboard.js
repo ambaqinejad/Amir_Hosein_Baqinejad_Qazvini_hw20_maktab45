@@ -31,8 +31,12 @@ router.post('/update', dashboardController.updateBlogger);
 
 router.post('/uploadAvatar', dashboardController.uploadAvatar);
 
-router.post('/uploadPost', dashboardController.uploadPost);
+router.post('/uploadPost',
+    validator.isNotEmpty('title', '/dashboard/newPost'),
+    dashboardController.uploadPost);
 
 router.post('/uploadPostImage', dashboardController.uploadPostImage);
+
+router.post('/deletePostImage', dashboardController.deletePostImage);
 
 module.exports = router;
