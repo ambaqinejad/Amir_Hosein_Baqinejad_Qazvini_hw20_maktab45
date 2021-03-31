@@ -21,14 +21,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 upload: file => {
                     return new Promise((resolve, reject) => {
                         const formData = new FormData();
-
-                        formData.append("image", file, file.name);
-                        console.log(file);
-                        for (var key of formData.entries()) {
-                            console.log(key[0] + ', ' + key[1]);
-                        }
+                        formData.append("postImage", file, file.name);
                         fetch(
-                                "/dashboard/uploadAvatar", {
+                                "/dashboard/uploadPostImage", {
                                     method: "POST",
                                     body: formData
                                 }

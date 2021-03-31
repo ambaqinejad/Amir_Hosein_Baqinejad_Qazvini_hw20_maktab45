@@ -2,26 +2,52 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 
-const avatarStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(process.cwd(), 'public', 'images', 'avatars'))
-    },
-    filename: (req, file, cb) => {
-        console.log(file);
-        cb(null, `${req.session.blogger.username}-${Date.now()}-${file.originalname}`)
+const destination = (address) => {
+    return (req, file, cb) => {
+        cb(null, address)
     }
+}
+
+const filename = (foldername) => {
+    return (req, file, cb) => {
+        const imageName = `${req.session.blogger.username}-${foldername}-${Date.now()}-${file.originalname}`;
+        req.file = file;
+        req.file.imageName = imageName;
+        cb(null, imageName)
+    }
+}
+
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'image/jpeg' ||
+        file.mimetype === 'image/jpg' ||
+        file.mimetype === 'image/png') {
+        cb(null, true);
+    } else {
+        cb(new Error('Invalid type of image'), false);
+    }
+}
+
+const avatarStorage = multer.diskStorage({
+    destination: destination(path.join(process.cwd(), 'public', 'images', 'avatars')),
+    filename: filename('avatar')
 });
 
-module.exports = multer({
-    storage: avatarStorage,
-    fileFilter: (req, file, cb) => {
-        console.log('456', req.body);
-        if (file.mimetype === 'image/jpeg' ||
-            file.mimetype === 'image/jpg' ||
-            file.mimetype === 'image/png') {
-            cb(null, true);
-        } else {
-            cb(new Error('Invalid type of image'), false);
-        }
-    }
+const postImageStorage = multer.diskStorage({
+    destination: destination(path.join(process.cwd(), 'public', 'images', 'post_images')),
+    filename: filename('post_image')
 })
+
+const uploadAvatar = multer({
+    storage: avatarStorage,
+    fileFilter
+})
+
+const uploadPostImage = multer({
+    storage: postImageStorage,
+    fileFilter
+})
+
+module.exports = {
+    uploadAvatar,
+    uploadPostImage
+}

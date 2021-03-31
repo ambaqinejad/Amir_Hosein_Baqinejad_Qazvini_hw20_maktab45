@@ -33,4 +33,6 @@ router.post('/uploadAvatar', dashboardController.uploadAvatar);
 
 router.post('/uploadPost', dashboardController.uploadPost);
 
+router.post('/uploadPostImage', dashboardController.uploadPostImage);
+
 module.exports = router;

@@ -4,7 +4,6 @@ const fs = require('fs');
 
 // third party modules
 const multer = require('multer');
-const { resolveSoa } = require('dns');
 
 // my own modules
 const Blogger = require(path.join(process.cwd(), 'models', 'blogger.js'));
@@ -75,8 +74,7 @@ const logout = (req, res, next) => {
 }
 
 const uploadAvatar = (req, res, next) => {
-    const upload = multerInitializer.single('image');
-    console.log(req.file);
+    const upload = multerInitializer.uploadAvatar.single('avatar');
     upload(req, res, (err) => {
         if (err instanceof multer.MulterError) {
             console.log(err.message);
@@ -110,6 +108,22 @@ const uploadAvatar = (req, res, next) => {
     })
 }
 
+const uploadPostImage = (req, res, next) => {
+    const upload = multerInitializer.uploadPostImage.single('postImage');
+    upload(req, res, error => {
+        if (error) {
+            res.status(500).json({
+                message: err.message
+            })
+        } else {
+            console.log(req.file);
+            res.json({
+                imageUrl: path.join(process.cwd(), 'public', 'images', 'post_images', req.file.imageName)
+            })
+        }
+    })
+}
+
 const uploadPost = (req, res, next) => {
     console.log(req.about);
 }
@@ -122,5 +136,6 @@ module.exports = {
     updateBlogger,
     logout,
     uploadAvatar,
-    uploadPost
+    uploadPost,
+    uploadPostImage
 }
