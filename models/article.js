@@ -1,16 +1,24 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const essential = {
+    type: String,
+    required: true
+}
 const articleSchema = new Schema({
     postedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Blogger'
-    },
-    title: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Blogger',
         required: true
     },
-    content: String,
+    title: essential,
+    image: {
+        ...essential,
+        default: 'default.jpg'
+    },
+    description: essential,
+    content: essential,
+    htmlContent: essential,
     createdAt: {
         type: Date,
         default: Date.now

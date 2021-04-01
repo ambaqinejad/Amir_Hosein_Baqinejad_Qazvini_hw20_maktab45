@@ -12,9 +12,24 @@ const redirect = require(path.join(process.cwd(), 'tools', 'redirection.js'));
 const multerInitializer = require(path.join(process.cwd(), 'tools', 'multerInitializer.js'));
 
 const getDashboardPage = (req, res, next) => {
-    res.render('dashboard.ejs', {
-        blogger: req.session.blogger
-    })
+    Article.find({}).populate('postedBy', {
+            firstName: true,
+            lastName: true,
+            username: true,
+            email: true,
+            avatar: true,
+        }).exec((err, articles) => {
+            if (err) {
+                return console.log(err);
+            }
+            res.render('dashboard.ejs', {
+                blogger: req.session.blogger,
+                articles
+            })
+        })
+        // res.render('dashboard.ejs', {
+        //     blogger: req.session.blogger
+        // })
 }
 
 const getNewPostPage = (req, res, next) => {
@@ -117,7 +132,6 @@ const uploadPostImage = (req, res, next) => {
                 message: err.message
             })
         } else {
-            console.log(req.file);
             res.json({
                 imageUrl: `images/post_images/${req.file.imageName}`
             })
@@ -127,17 +141,21 @@ const uploadPostImage = (req, res, next) => {
 
 const deletePostImage = (req, res) => {
     req.body.forEach(url => {
-        fs.unlinkSync(path.join(process.cwd(), 'public', url));
+        try {
+            fs.unlinkSync(path.join(process.cwd(), 'public', url));
+        } catch (err) {
+            console.log(err.message);
+        }
     })
 }
 
 const uploadPost = (req, res, next) => {
-    new Article(req.body).save(err => {
-        if (err) {
-            return redirect(res, '/dashboard/newPost', 'Something went wrong.');
-        } else {
-            return res.redirect('/dashboard')
-        }
+    console.log('abc', req.body);
+    const upload = multerInitializer.uploadPostImage.single('postHeaderImage');
+    upload(req, res, err => {
+        // inja ---------------------------------
+        console.log(req.body);
+        console.log(req.file);
     })
 }
 

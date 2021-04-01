@@ -32,7 +32,7 @@ router.post('/update', dashboardController.updateBlogger);
 router.post('/uploadAvatar', dashboardController.uploadAvatar);
 
 router.post('/uploadPost',
-    validator.isNotEmpty('title', '/dashboard/newPost'),
+    // validator.isNotEmpty('title', '/dashboard/newPost'),
     dashboardController.uploadPost);
 
 router.post('/uploadPostImage', dashboardController.uploadPostImage);

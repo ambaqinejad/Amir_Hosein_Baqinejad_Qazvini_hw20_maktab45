@@ -4,6 +4,7 @@ const redirect = require(path.join(__dirname, 'redirection.js'));
 
 const isNotEmpty = (elName, url) => {
     return (req, res, next) => {
+        console.log(req.body);
         if (!req.body[elName]) {
             return redirect(res, url, `${elName} can not be empty.`);
         }

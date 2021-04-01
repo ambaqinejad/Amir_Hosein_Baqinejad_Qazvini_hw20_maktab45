@@ -27,11 +27,27 @@
             blogger
         }) %>
 
-            <!-- Use any element to open the sidenav -->
+            <p id='temp' class="d-none">
+                <%= articles %>
+            </p>
             <main class="p-3">
-                <h2 class="d-flex justify-content-center">Hi
-                    <%= blogger.username %>
-                </h2>
+                <div class="row">
+                    <% articles.forEach(article => { %>
+                        <div class="col-sm-12 col-md-6 col-lg-4 p-3">
+                            <!-- <div id="" class="mb-1"></div>
+                            <div class="mb-1">
+                                <label for="title">Title</label><span class="ms-3 text-danger" id="titleError"></span>
+                                <input type="text" class="form-control" id="title" name="title">
+                            </div>
+                            <p id="no-title-error" class="text-danger"></p>
+                            <input name="content" type="hidden" id="content"> -->
+                            <p>
+                                <%= article.title %>
+                            </p>
+
+                        </div>
+                        <% }) %>
+                </div>
             </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>

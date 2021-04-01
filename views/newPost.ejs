@@ -28,25 +28,33 @@
             blogger
         }) %>
 
-            <main class="p-3">
+            <main class="p-1">
                 <div class="row">
                     <div class="col"></div>
-                    <div class="col-sm-12 col-md-10 col-lg-8 p-2">
-                        <form action="/dashboard/uploadPost" method="post" id="postForm">
-                            <input name="bloggerID" type="hidden" id="bloggerID" value="<%= blogger._id %> ">
-                            <div class="mb-1">
-                                <label for="title">Title</label><span class="ms-3 text-danger" id="titleError"></span>
-                                <input type="text" class="form-control" id="title" name="title">
+                    <div class="col-sm-12 col-md-10 col-lg-8">
+                        <form action="/dashboard/uploadPost" method="post" id="postForm" enctype="multipart/form-data">
+                            <div class="d-flex mb-1 justify-contentd-between">
+                                <div class="p-1 col-sm-8 col-md-6 col-lg-7">
+                                    <label for="title">Title</label><span class="ms-3 text-danger" id="titleError"></span>
+                                    <input type="text" class="form-control" id="title" name="title">
+                                </div>
+                                <div class="p-1 col-sm-4 col-md-6 col-lg-5">
+                                    <label for="postHeaderImage">Choose the Post Image</label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description">Description</label><span class="ms-3 text-danger" id="descriptionError"></span>
+                                <input type="text" class="form-control" id="description" name="description">
                             </div>
                             <input name="content" type="hidden" id="content">
-                            <div id="editor" style="height: 400px;" class="mb-3"></div>
+                            <input name="htmlContent" type="hidden" id="htmlContent">
+                            <div id="editor" style="height: 400px;" class="mb-1"></div>
+                            <input type="file" class="form-control d-none" id="postHeaderImage" name="postHeaderImage">
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-primary" type="submit">Post the Article</button>
+                                <button class="btn btn-primary" type="submit" id="postBtn">Post the Article</button>
                             </div>
+                            <span class="" id="postServer"></span>
                         </form>
-                        <span class="text-danger" id="imageError"></span>
-                        <span class="text-danger" id="postError"></span>
-                        <span class="" id="postServer"></span>
                     </div>
                     <div class="col"></div>
                 </div>

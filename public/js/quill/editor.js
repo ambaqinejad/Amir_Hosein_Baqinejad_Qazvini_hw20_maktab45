@@ -24,8 +24,6 @@ $(document).ready(function() {
         const deleted = getImgUrls(quill.getContents().diff(oldContents));
         deleted.length && console.log('delete', typeof deleted)
         if (deleted.length) {
-            let a = JSON.stringify(deleted)
-            console.log('a', a);
             fetch('/dashboard/deletePostImage', {
                 method: 'POST',
                 body: JSON.stringify(deleted),
@@ -36,13 +34,34 @@ $(document).ready(function() {
         }
     });
 
-    $('#postForm').submit(function(e) {
+    $('#postForm').submit(function() {
+        $('#titleError').text('');
+        $('#descriptionError').text('');
         $('#content').val(JSON.stringify(quill.getContents()));
-        if (!$('#title').val() || !$('#content').val()) {
-            $('#postError').text('Post must have title and content.');
+        $('#htmlContent').val(quill.root.innerHTML);
+        // console.log(quill.root.innerHTML);
+        if (!$('#title').val() || !$('#description').val()) {
+            if (!$('#title').val()) {
+                $('#titleError').text('Title required.');
+            }
+            if (!$('#description').val()) {
+                $('#descriptionError').text('Description required.');
+            }
             return false;
         }
-        return true;
+
+        // if(flag) {
+        //     const formData = new FormData();
+        //     formData.append('title', $('#title').val());
+        //     formData.append('description', $('#description').val());
+        //     formData.append('content', $('#content').val());
+        //     formData.append('htmlContent', $('#htmlContent').val());
+        //     // formData.append('postHeaderImage', $('#postHeaderImage')[0].files[0], $('#postHeaderImage')[0].files[0].name);
+        //     fetch('/dashboard/uploadPost', {
+        //         method: 'POST',
+        //         body: formData
+        //     })
+        // }
     });
 
     function getImgUrls(delta) {
@@ -67,6 +86,7 @@ const selectLocalImage = () => {
 
 const postImageToServer = (file) => {
     const formData = new FormData();
+    console.log(file);
     formData.append('postImage', file, file.name);
     fetch('/dashboard/uploadPostImage', {
             method: 'POST',

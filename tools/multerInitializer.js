@@ -37,6 +37,14 @@ const postImageStorage = multer.diskStorage({
     filename: filename('post_image')
 })
 
+const postHeaderImageStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        console.log('zzz', req.body);
+        cb(null, path.join(process.cwd(), 'public', 'images', 'post_header_image'))
+    },
+    filename: filename('post_header_image')
+})
+
 const uploadAvatar = multer({
     storage: avatarStorage,
     fileFilter
@@ -47,7 +55,13 @@ const uploadPostImage = multer({
     fileFilter
 })
 
+const uploadPostHeaderImage = multer({
+    storage: postHeaderImageStorage,
+    fileFilter
+})
+
 module.exports = {
     uploadAvatar,
-    uploadPostImage
+    uploadPostImage,
+    uploadPostHeaderImage
 }
