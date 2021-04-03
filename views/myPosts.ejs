@@ -26,15 +26,13 @@
         <%- include('./partials/sidenav.ejs', {
             blogger
         }) %>
-
-
             <main class="p-3">
                 <div class="row">
                     <% if(err) { %>
                         <div class="d-flex justify-content-center">
                             <span class="text-danger"><%= err %> </span>
                         </div>
-                        <% } else {articles.forEach(article => { %>
+                        <% } else if(articles !== null) {articles.forEach(article => { %>
 
                             <div class="col-sm-12 col-md-6 col-lg-4 px-5">
                                 <div class="card d-flex align-items-center p-4">

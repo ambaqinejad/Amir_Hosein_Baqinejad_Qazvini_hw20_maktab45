@@ -15,6 +15,8 @@ router.use('/articleDetail', express.static(path.join(process.cwd(), 'public')))
 
 router.get('/', dashboardController.getDashboardPage);
 
+router.get('/myPosts', dashboardController.getMyPostsPage);
+
 router.get('/newPost', dashboardController.getNewPostPage);
 
 router.get('/whoAmI', dashboardController.getWhoAmIPage);

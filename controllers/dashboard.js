@@ -35,6 +35,29 @@ const getDashboardPage = (req, res, next) => {
     })
 }
 
+const getMyPostsPage = (req, res, next) => {
+    Article.find({ postedBy: req.session.blogger._id }).populate('postedBy', {
+        firstName: true,
+        lastName: true,
+        username: true,
+        email: true,
+        avatar: true,
+    }).exec((err, articles) => {
+        if (err) {
+            return res.render('myPosts.ejs', {
+                err: 'Could not to retrieve articles. Something went wrong.',
+                detailError: ""
+            });
+        }
+        res.render('myPosts.ejs', {
+            err: '',
+            blogger: req.session.blogger,
+            articles,
+            detailError: req.query.detailError || ''
+        })
+    })
+}
+
 const getNewPostPage = (req, res, next) => {
     res.render('newPost.ejs', {
         blogger: req.session.blogger,
@@ -189,13 +212,14 @@ const uploadPost = (req, res, next) => {
             if (err) {
                 return redirect(res, '/dashboard/newPost', 'Title and description are required.')
             }
-            return redirect(res, '/dashboard/newPost', 'Posted successfully.')
+            return res.redirect('/dashboard/myPosts');
         })
     })
 }
 
 module.exports = {
     getDashboardPage,
+    getMyPostsPage,
     getNewPostPage,
     getWhoAmIPage,
     getModifyInformationPage,
