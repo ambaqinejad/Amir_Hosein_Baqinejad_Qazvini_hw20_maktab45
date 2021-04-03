@@ -49,7 +49,7 @@
                                             <%= article.description %>
                                         </p>
                                         <div class="d-flex justify-content-center">
-                                            <a href="#" class="btn btn-primary">Read the Article</a>
+                                            <a href="/dashboard/articleDetail/<%= article._id %>" class="btn btn-primary">Read the Article</a>
                                         </div>
                                     </div>
                                     <hr>
@@ -60,9 +60,13 @@
                                     <p><strong>Writer Email:</strong>
                                         <%= article.postedBy.email %>
                                     </p>
+                                    <p><strong>Created at:</strong>
+                                        <%= article.createdAt.toISOString().substring(0, 10) %>
+                                    </p>
                                 </div>
                             </div>
                             <% })} %>
+                                <span class="text-danger"><%= detailError %></span>
                 </div>
             </main>
     </div>

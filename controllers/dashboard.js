@@ -21,14 +21,16 @@ const getDashboardPage = (req, res, next) => {
     }).exec((err, articles) => {
         if (err) {
             return res.render('dashboard.ejs', {
-                err: 'Could not to retrieve articles. Something went wrong.'
+                err: 'Could not to retrieve articles. Something went wrong.',
+                detailError: ""
             });
         }
         console.log(articles);
         res.render('dashboard.ejs', {
             err: '',
             blogger: req.session.blogger,
-            articles
+            articles,
+            detailError: req.query.detailError || ''
         })
     })
 }
@@ -51,6 +53,27 @@ const getModifyInformationPage = (req, res, next) => {
         blogger: req.session.blogger,
         message: req.query.message || ''
     })
+}
+
+const getDetailPage = (req, res, next) => {
+    res.render('postDetail.ejs', {
+        blogger: req.session.blogger
+    })
+}
+
+const getArticle = (req, res, next) => {
+    const articleID = req.body.articleID;
+    Article.findById(articleID).populate('postedBy')
+        .exec((err, article) => {
+            if (err) {
+                return res.status(500).json({
+                    err: err.message,
+                })
+            }
+            res.json({
+                article
+            })
+        })
 }
 
 const updateBlogger = (req, res, next) => {
@@ -176,6 +199,8 @@ module.exports = {
     getNewPostPage,
     getWhoAmIPage,
     getModifyInformationPage,
+    getDetailPage,
+    getArticle,
     updateBlogger,
     logout,
     uploadAvatar,

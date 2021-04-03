@@ -11,6 +11,7 @@ const validator = require(path.join(process.cwd(), 'tools', 'validator.js'));
 const router = express.Router();
 
 router.use(express.static(path.join(process.cwd(), 'public')));
+router.use('/articleDetail', express.static(path.join(process.cwd(), 'public')));
 
 router.get('/', dashboardController.getDashboardPage);
 
@@ -25,7 +26,11 @@ router.get('/modifyInformation',
     validator.isNumber('phone', '/dashboard/modifyInformation'),
     dashboardController.getModifyInformationPage);
 
-router.get('/logout', dashboardController.logout)
+router.get('/logout', dashboardController.logout);
+
+router.get('/articleDetail/:articleID', dashboardController.getDetailPage)
+
+router.post('/getArticle', dashboardController.getArticle)
 
 router.post('/update', dashboardController.updateBlogger);
 
