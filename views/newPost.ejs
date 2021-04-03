@@ -33,13 +33,13 @@
                     <div class="col"></div>
                     <div class="col-sm-12 col-md-10 col-lg-8">
                         <form action="/dashboard/uploadPost" method="post" id="postForm" enctype="multipart/form-data">
+                            <label for="title">Title</label><span class="ms-3 text-danger" id="titleError"></span>
                             <div class="d-flex mb-1 justify-contentd-between">
                                 <div class="p-1 col-sm-8 col-md-6 col-lg-7">
-                                    <label for="title">Title</label><span class="ms-3 text-danger" id="titleError"></span>
                                     <input type="text" class="form-control" id="title" name="title">
                                 </div>
                                 <div class="p-1 col-sm-4 col-md-6 col-lg-5">
-                                    <label for="postHeaderImage">Choose the Post Image</label>
+                                    <label for="postHeaderImage" class="c-pointer"><i class="fa fa-camera"></i> Choose the Post Image</label>
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -50,10 +50,10 @@
                             <input name="htmlContent" type="hidden" id="htmlContent">
                             <div id="editor" style="height: 400px;" class="mb-1"></div>
                             <input type="file" class="form-control d-none" id="postHeaderImage" name="postHeaderImage">
-                            <div class="d-flex justify-content-center">
+                            <div class="d-flex justify-content-between align-items-baseline">
                                 <button class="btn btn-primary" type="submit" id="postBtn">Post the Article</button>
+                                <span class="mt-3 text-danger"><%= message %></span>
                             </div>
-                            <span class="" id="postServer"></span>
                         </form>
                     </div>
                     <div class="col"></div>

@@ -39,7 +39,6 @@ const postImageStorage = multer.diskStorage({
 
 const postHeaderImageStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        console.log('zzz', req.body);
         cb(null, path.join(process.cwd(), 'public', 'images', 'post_header_image'))
     },
     filename: filename('post_header_image')

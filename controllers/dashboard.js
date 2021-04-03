@@ -13,28 +13,30 @@ const multerInitializer = require(path.join(process.cwd(), 'tools', 'multerIniti
 
 const getDashboardPage = (req, res, next) => {
     Article.find({}).populate('postedBy', {
-            firstName: true,
-            lastName: true,
-            username: true,
-            email: true,
-            avatar: true,
-        }).exec((err, articles) => {
-            if (err) {
-                return console.log(err);
-            }
-            res.render('dashboard.ejs', {
-                blogger: req.session.blogger,
-                articles
-            })
+        firstName: true,
+        lastName: true,
+        username: true,
+        email: true,
+        avatar: true,
+    }).exec((err, articles) => {
+        if (err) {
+            return res.render('dashboard.ejs', {
+                err: 'Could not to retrieve articles. Something went wrong.'
+            });
+        }
+        console.log(articles);
+        res.render('dashboard.ejs', {
+            err: '',
+            blogger: req.session.blogger,
+            articles
         })
-        // res.render('dashboard.ejs', {
-        //     blogger: req.session.blogger
-        // })
+    })
 }
 
 const getNewPostPage = (req, res, next) => {
     res.render('newPost.ejs', {
-        blogger: req.session.blogger
+        blogger: req.session.blogger,
+        message: req.query.message || ''
     })
 }
 
@@ -150,12 +152,22 @@ const deletePostImage = (req, res) => {
 }
 
 const uploadPost = (req, res, next) => {
-    console.log('abc', req.body);
-    const upload = multerInitializer.uploadPostImage.single('postHeaderImage');
+    const upload = multerInitializer.uploadPostHeaderImage.single('postHeaderImage');
     upload(req, res, err => {
-        // inja ---------------------------------
-        console.log(req.body);
-        console.log(req.file);
+        if (err) {
+            return redirect(res, '/dashboard/newPost', 'Something went wrong.')
+        }
+        if (!req.body.title || !req.body.description) {
+            return redirect(res, '/dashboard/newPost', 'Title and description are required.')
+        }
+        req.body.image = req.file.imageName;
+        req.body.postedBy = req.session.blogger._id
+        new Article(req.body).save(err => {
+            if (err) {
+                return redirect(res, '/dashboard/newPost', 'Title and description are required.')
+            }
+            return redirect(res, '/dashboard/newPost', 'Posted successfully.')
+        })
     })
 }
 

@@ -32,21 +32,37 @@
             </p>
             <main class="p-3">
                 <div class="row">
-                    <% articles.forEach(article => { %>
-                        <div class="col-sm-12 col-md-6 col-lg-4 p-3">
-                            <!-- <div id="" class="mb-1"></div>
-                            <div class="mb-1">
-                                <label for="title">Title</label><span class="ms-3 text-danger" id="titleError"></span>
-                                <input type="text" class="form-control" id="title" name="title">
-                            </div>
-                            <p id="no-title-error" class="text-danger"></p>
-                            <input name="content" type="hidden" id="content"> -->
-                            <p>
-                                <%= article.title %>
-                            </p>
-
+                    <% if(err) { %>
+                        <div class="d-flex justify-content-center">
+                            <span class="text-danger"><%= err %> </span>
                         </div>
-                        <% }) %>
+                        <% } else {articles.forEach(article => { %>
+
+                            <div class="col-sm-12 col-md-6 col-lg-4 px-5">
+                                <div class="card d-flex align-items-center p-4">
+                                    <img class="card-img-top post-card-image" src="<%=article.image ? `images/post_header_image/${article.image}` : `images/avatars/default.jpg`%>">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center">
+                                            <%= article.title %>
+                                        </h5>
+                                        <p class="card-text text-center">
+                                            <%= article.description %>
+                                        </p>
+                                        <div class="d-flex justify-content-center">
+                                            <a href="#" class="btn btn-primary">Read the Article</a>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <img src="<%=article.postedBy.avatar ? `images/avatars/${article.postedBy.avatar}` : " images/avatars/default.jpg "%>" alt="" class="mb-3 writer-avatar_container">
+                                    <p><strong>Writer:</strong>
+                                        <%= article.postedBy.username %>
+                                    </p>
+                                    <p><strong>Writer Email:</strong>
+                                        <%= article.postedBy.email %>
+                                    </p>
+                                </div>
+                            </div>
+                            <% })} %>
                 </div>
             </main>
     </div>
